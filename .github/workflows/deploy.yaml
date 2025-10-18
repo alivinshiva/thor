@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Execute remote SSH commands using password
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
         with:
           host: 13.201.167.137
@@ -22,4 +22,37 @@ jobs:
           key: ${{ secrets.PVT_SECRET }}
           port: 22
           script: |
-            ls
+            # Navigate to app directory or create it
+            cd /home/ubuntu
+            
+            # Clone repo if it doesn't exist, otherwise pull latest changes
+            if [ ! -d "thor" ]; then
+              echo "Cloning repository..."
+              git clone https://github.com/alivinshiva/thor.git
+              cd thor
+            else
+              echo "Repository exists, pulling latest changes..."
+              cd thor
+              git pull origin main
+            fi
+            
+            # Install dependencies
+            echo "Installing dependencies..."
+            npm install
+            
+            # Build the Next.js application
+            echo "Building Next.js application..."
+            npm run build
+            
+            # Restart the application using PM2 (or start if not running)
+            echo "Restarting application with PM2..."
+            if pm2 describe thor > /dev/null 2>&1; then
+              pm2 restart thor
+            else
+              pm2 start npm --name "thor" -- start
+            fi
+            
+            # Save PM2 process list
+            pm2 save
+            
+            echo "Deployment completed successfully!"
