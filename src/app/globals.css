@@ -1,23 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Always-on dark theme */
+  --background: #05060a; /* deep night sky */
+  --foreground: #e6e6e6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Removed @theme inline mapping to avoid editor diagnostics; using standard Tailwind utilities */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Removed media query to force dark mode regardless of system preference */
 
 body {
   background: var(--background);
