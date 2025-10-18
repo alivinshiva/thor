@@ -19,6 +19,6 @@ jobs:
         with:
           host: 13.201.167.137
           username: ubuntu
-          password: ${{ secrets.PVT_SECRET }}
+          key: ${{ secrets.PVT_SECRET }}
           port: 22
           script: whoami
